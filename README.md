@@ -4,7 +4,7 @@ This notebook provides a step-by-step introduction to using SHAP for explainable
 
 ---
 
-## 📌 Contents
+## Contents
 1. What is SHAP?  
 2. Installing Dependencies  
 3. Load Dataset  
