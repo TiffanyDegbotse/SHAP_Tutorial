@@ -1,38 +1,88 @@
 # SHAP (SHapley Additive exPlanations) Tutorial with California Housing
 
-This notebook provides a step-by-step introduction to using **SHAP** for explainable AI.  
-We demonstrate how to interpret machine learning predictions using the **California Housing dataset** and a **Random Forest Regressor**.
+This notebook provides a step-by-step introduction to using SHAP for explainable AI. We demonstrate how to interpret machine learning predictions using the California Housing dataset and a Random Forest Regressor.
 
 ---
 
 ## 📌 Contents
-1. [What is SHAP?](#1-what-is-shap)  
-2. [Installation](#installing-dependencies)  
-3. [Dataset](#2-load-dataset)  
-4. [Model Training](#3-train-a-model)  
-5. [SHAP Explanations](#4-shap-explanations)  
-   - [Global Interpretability: SHAP Summary Plot](#global-interpretability-shap-summary-plot)  
-   - [Local Interpretability: SHAP Waterfall Plot](#local-interpretability-shap-waterfall-plot)  
-6. [Conclusion](#5-conclusion)
+1. What is SHAP?  
+2. Installing Dependencies  
+3. Load Dataset  
+4. Train a Model  
+5. SHAP Explanations  
+   - Global Interpretability: SHAP Summary Plot  
+   - Local Interpretability: SHAP Waterfall Plot  
+6. Conclusion  
 
 ---
 
 ## 1. What is SHAP?
 
-**SHAP (SHapley Additive exPlanations)** is a method based on Shapley values from cooperative game theory.  
-It explains the prediction of any machine learning model by assigning each feature an importance value for a particular prediction.
+SHAP (SHapley Additive exPlanations) is a method based on Shapley values from cooperative game theory. It explains the prediction of any machine learning model by assigning each feature an importance value for a particular prediction.
 
 **Key advantages of SHAP:**
-- **Model-agnostic:** Works with tree-based, linear, and neural network models.  
-- **Fair attribution:** Distributes contributions among features fairly.  
-- **Consistent explanations:** If a feature contributes more, SHAP ensures it gets higher attribution.  
+- Model-agnostic: Works with tree-based, linear, and neural network models.  
+- Fair attribution: Distributes contributions among features fairly.  
+- Consistent explanations: If a feature contributes more, SHAP ensures it gets higher attribution.  
 
-👉 In simple terms, SHAP helps us answer:  
-**“How much did each feature contribute to this prediction?”**
+In simple terms, SHAP helps us answer: “How much did each feature contribute to this prediction?”
 
 ---
 
-## Installing Dependencies
+## 2. Installing Dependencies
 
-```bash
-pip install shap scikit-learn matplotlib
+We install SHAP alongside supporting libraries such as scikit-learn and matplotlib. These libraries will be used to load the dataset, train the machine learning model, and visualize SHAP explanations.
+
+---
+
+## 3. Load Dataset
+
+We use the California Housing dataset, where the goal is to predict house prices based on features such as median income, average rooms, population, house age, latitude, and longitude. The dataset is split into training and test sets so we can evaluate how well the model generalizes to unseen data.
+
+---
+
+## 4. Train a Model
+
+We train a Random Forest Regressor as our black-box model. The focus is not on building the most accurate model but on showing how SHAP can be used to interpret predictions. After training, the model can predict housing prices based on the input features.
+
+---
+
+## 5. SHAP Explanations
+
+We use TreeExplainer, which is optimized for tree-based models such as Random Forest, XGBoost, and LightGBM. This allows us to compute SHAP values that explain how each feature influences the predictions. To speed up computations, we use a smaller sample of the test dataset since SHAP can become computationally expensive on larger datasets.
+
+### Global Interpretability: SHAP Summary Plot
+
+The SHAP summary plot, also called a beeswarm plot, shows which features matter most overall and how their values influence predictions across the dataset.
+
+- Y-axis: Features sorted by importance.  
+- X-axis: SHAP values representing the impact on the prediction.  
+- Color: Actual feature values, where red represents higher values and blue represents lower values.  
+
+From the summary plot, we can see that Median Income is the most important feature. Higher income strongly increases the predicted housing price, while lower income decreases it. Latitude and Longitude are also highly influential, with northern locations (higher latitudes) pushing predictions down and southern locations pushing them up. Average Occupancy affects predictions as well, while features such as House Age, Average Rooms, Average Bedrooms, and Population play smaller roles.  
+
+This plot answers three questions: which features matter most, how feature values influence predictions, and whether the influence is positive or negative.
+
+### Local Interpretability: SHAP Waterfall Plot
+
+The SHAP waterfall plot provides a local explanation for one specific prediction. It shows how individual features contributed step by step, starting from the baseline (the model’s average prediction) and moving to the final predicted value for that instance.  
+
+- Baseline: The average model output across the dataset.  
+- Final prediction: The predicted value for the chosen instance.  
+- Red bars: Features that increased the prediction.  
+- Blue bars: Features that decreased the prediction.  
+
+For example, in one prediction the largest positive driver was high occupancy (AveOccup), which strongly pushed the prediction upward. This was partially offset by lower median income (MedInc), which pulled the prediction downward. Other features such as Latitude, Longitude, House Age, and Average Bedrooms contributed smaller adjustments.  
+
+The waterfall plot illustrates how the baseline value is adjusted by each feature until the final prediction is reached.
+
+---
+
+## 6. Conclusion
+
+In this tutorial, we covered:  
+- What SHAP is and why it matters.  
+- How to train a Random Forest model and compute SHAP values.  
+- How to interpret model predictions at both a global level (summary plot) and a local level (waterfall plot).  
+
+**Key takeaway:** SHAP is a powerful tool for making black-box models more transparent and trustworthy, helping us understand not just which features are important, but also how they influence predictions.  
