@@ -1,4 +1,4 @@
-# SHAP (SHapley Additive exPlanations) Tutorial with California Housing
+# SHAP (Shapley Additive Explanations) Tutorial with California Housing
 
 This notebook provides a step-by-step introduction to using SHAP for explainable AI. We demonstrate how to interpret machine learning predictions using the California Housing dataset and a Random Forest Regressor.
 
